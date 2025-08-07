@@ -13,6 +13,7 @@ public class ItemMapper {
         if (item == null) {
             return null;
         }
+        
         return CreateItemDto.builder()
                 .id(item.getId())
                 .name(item.getName())
@@ -26,6 +27,7 @@ public class ItemMapper {
         if (createItemDto == null) {
             return null;
         }
+
         return Item.builder()
                 .name(createItemDto.getName())
                 .description(createItemDto.getDescription())
