@@ -32,18 +32,28 @@ build/
 ### VS Code ###
 .vscode/
 
-# Java
+# Binary files
 *.class
 *.jar
+*.DS_Store
+*.exe
+*.dll
+*.zip
+*.tar
+*.gz
+*.7z
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.mp4
+*.avi
+*.mov
+*.pdf
 
-# OS
-.DS_Store
+# Build folders
+target/
+build/
+out/
 
-*.db
-db/*
-# Java
-*.class
-*.jar
-
-# Mac
-.DS_Store
