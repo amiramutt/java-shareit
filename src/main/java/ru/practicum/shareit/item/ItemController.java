@@ -4,7 +4,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.item.comment.CommentDto;
 import ru.practicum.shareit.item.dto.CreateItemDto;
+import ru.practicum.shareit.item.dto.ItemWithBookingDto;
 import ru.practicum.shareit.item.dto.UpdateItemDto;
 import ru.practicum.shareit.item.service.ItemService;
 
@@ -37,18 +39,25 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    public CreateItemDto getItemById(@PathVariable Long itemId) {
+    public ItemWithBookingDto getItemById(@PathVariable Long itemId) {
         return itemService.getItemById(itemId);
     }
 
     @GetMapping
-    public Collection<CreateItemDto> getAllItemsByUserId(@RequestHeader(USER_ID) Long userId) {
+    public Collection<ItemWithBookingDto> getAllItemsByUserId(@RequestHeader(USER_ID) Long userId) {
         return itemService.getAllItemsByOwnerId(userId);
     }
 
     @GetMapping("/search")
     public List<CreateItemDto> getAvailableItemsByText(@RequestParam String text) {
         return itemService.getAvailableItemsByText(text);
+    }
+
+    @PostMapping("/{itemId}/comment")
+    public CommentDto addComment(@RequestHeader(USER_ID) Long userId,
+                                 @PathVariable Long itemId,
+                                 @RequestBody CommentDto commentDto) {
+        return itemService.addComment(userId, itemId, commentDto);
     }
 
 }

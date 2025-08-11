@@ -8,7 +8,7 @@ import ru.practicum.shareit.user.dto.CreateUserDto;
 import ru.practicum.shareit.user.dto.UpdateUserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.storage.UserStorage;
+import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,59 +17,60 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserStorage userStorage;
+    private final UserRepository userRepository;
 
     @Override
     public List<CreateUserDto> getAllUsers() {
-        return userStorage.getAll().stream()
+        return userRepository.findAll().stream()
                 .map(UserMapper::toUserDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public CreateUserDto getUserById(Long userId) {
-        User user = userStorage.getUserById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с ID " + userId + " не найден."));
         return UserMapper.toUserDto(user);
     }
 
     @Override
     public CreateUserDto addUser(CreateUserDto createUserDto) {
-        userStorage.getUserByEmail(createUserDto.getEmail()).ifPresent(u -> {
+        userRepository.findByEmailIgnoreCase(createUserDto.getEmail()).ifPresent(u -> {
             throw new InternalServerException("Email " + createUserDto.getEmail() + " уже используется другим пользователем.");
         });
         User user = UserMapper.toUser(createUserDto);
-        User savedUser = userStorage.addUser(user);
+        User savedUser = userRepository.save(user);
         return UserMapper.toUserDto(savedUser);
     }
 
     @Override
     public CreateUserDto updateUser(Long userId, UpdateUserDto newUserDto) {
-        User existingUser = userStorage.getUserById(userId)
+        User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с ID " + userId + " не найден для обновления."));
 
+        if (newUserDto.getName() != null && !newUserDto.getName().isBlank()) {
+            existingUser.setName(newUserDto.getName());
+        }
+
         if (newUserDto.getEmail() != null && !newUserDto.getEmail().equalsIgnoreCase(existingUser.getEmail())) {
-            userStorage.getUserByEmail(newUserDto.getEmail()).ifPresent(u -> {
+            userRepository.findByEmailIgnoreCase(newUserDto.getEmail()).ifPresent(u -> {
                 if (!u.getId().equals(userId)) {
                     throw new InternalServerException("Email " + newUserDto.getEmail() + " уже используется другим пользователем.");
                 }
             });
+            existingUser.setEmail(newUserDto.getEmail());
         }
 
-        User userToUpdate = UserMapper.toUser(newUserDto);
-        userToUpdate.setId(userId);
-
-        User updatedUser = userStorage.updateUser(userToUpdate)
-                .orElseThrow(() -> new NotFoundException("Не удалось обновить пользователя с ID " + userId));
+        User updatedUser = userRepository.save(existingUser);
 
         return UserMapper.toUserDto(updatedUser);
     }
 
     @Override
     public void deleteUser(Long userId) {
-        if (userStorage.getUserById(userId).isEmpty()) {
+        if (userRepository.findById(userId).isEmpty()) {
             throw new NotFoundException("Пользователь с ID " + userId + " не найден.");
         }
-        userStorage.deleteUserById(userId);
+        userRepository.deleteById(userId);
     }
 }
