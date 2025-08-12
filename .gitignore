@@ -31,3 +31,29 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Binary files
+*.class
+*.jar
+*.DS_Store
+*.exe
+*.dll
+*.zip
+*.tar
+*.gz
+*.7z
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.mp4
+*.avi
+*.mov
+*.pdf
+
+# Build folders
+target/
+build/
+out/
+
