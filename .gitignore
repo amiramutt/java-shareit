@@ -57,3 +57,6 @@ target/
 build/
 out/
 
+*.class
+*.jar
+.idea/
