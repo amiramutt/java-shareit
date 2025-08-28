@@ -40,3 +40,8 @@ build/
 *.class
 *.jar
 .idea/
+
+# Build folders
+target/
+build/
+out/
