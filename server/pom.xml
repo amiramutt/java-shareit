@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>ru.yandex.practicum</groupId>
-    <artifactId>shareIt-server</artifactId>
+    <artifactId>server</artifactId>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -69,7 +69,7 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>RELEASE</version>
+            <version>LATEST</version>
             <scope>test</scope>
         </dependency>
         <dependency>
