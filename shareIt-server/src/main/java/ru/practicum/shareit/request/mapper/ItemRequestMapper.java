@@ -13,6 +13,7 @@ import java.util.List;
 public class ItemRequestMapper {
     private ItemRequestMapper() {
     }
+    
     public static ItemRequest itemRequestCreateDtoToItemRequest(ItemRequestCreateDto createDto) {
         return ItemRequest.builder()
                 .description(createDto.getDescription())
