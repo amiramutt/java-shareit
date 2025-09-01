@@ -24,8 +24,8 @@ services:
       - db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/shareit
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=newpassword
+      - SPRING_DATASOURCE_USERNAME=shareit
+      - SPRING_DATASOURCE_PASSWORD=shareit
 
   db:
     image: postgres:16.1
@@ -34,7 +34,7 @@ services:
       - "6541:5432"
     environment:
       - POSTGRES_PASSWORD=newpassword
-      - POSTGRES_USER=postgres
+      - POSTGRES_USER=shareit
       - POSTGRES_DB=shareit
     healthcheck:
       test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
